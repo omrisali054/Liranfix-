@@ -1,0 +1,24 @@
+# systemd *user* service: runs the bot in the background and restarts it if it crashes.
+#
+#   mkdir -p ~/.config/systemd/user
+#   cp deploy/sniper-bot.service ~/.config/systemd/user/
+#   # edit the two paths below if the bot is not in ~/Liranfix-/sniper-bot
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now sniper-bot
+#   loginctl enable-linger "$USER"      # keep running after you log out
+#   journalctl --user -u sniper-bot -f  # live log
+
+[Unit]
+Description=Sniper Bot - deal alerts for fixable laptops and phones
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/Liranfix-/sniper-bot
+ExecStart=%h/Liranfix-/sniper-bot/.venv/bin/python -m sniper_bot -c config.toml run
+Restart=always
+RestartSec=60
+
+[Install]
+WantedBy=default.target

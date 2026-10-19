@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Example board</title>
+  <entry>
+    <title>Laptop for parts, cracked screen</title>
+    <id>tag:board.example,2026:ad-7</id>
+    <link rel="alternate" href="https://board.example/ad/7"/>
+    <summary>Lenovo T480, price 200 NIS, otherwise works.</summary>
+  </entry>
+</feed>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>לוח מודעות לדוגמה</title>
+    <item>
+      <title>מחשב נייד Dell – 350 ₪</title>
+      <link>https://board.example/ad/1</link>
+      <guid>https://board.example/ad/1</guid>
+      <description><![CDATA[<p>המחשב <b>לא נטען</b>, כנראה שקע טעינה.</p><img src="https://board.example/img/1.jpg">]]></description>
+    </item>
+    <item>
+      <title>לפטופ Asus למכירה</title>
+      <link>https://board.example/ad/2</link>
+      <description>מחיר: 1,200 ש"ח. עובד מצוין.</description>
+      <media:thumbnail url="https://board.example/img/2.jpg"/>
+    </item>
+    <item>
+      <title>מטען למחשב נייד</title>
+      <link>https://board.example/ad/3</link>
+      <description>מטען מקורי 50 ₪</description>
+    </item>
+  </channel>
+</rss>

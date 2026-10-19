@@ -1,0 +1,88 @@
+# Sniper Bot config. Copy to config.toml and edit:  cp config.example.toml config.toml
+# config.toml is git-ignored, so your tokens stay on your machine.
+
+[settings]
+interval_seconds = 120        # time between scans (plus a random 0..jitter_seconds)
+jitter_seconds = 60
+request_delay_seconds = 3     # pause between HTTP requests, be gentle with the boards
+db_path = "sniper.db"         # memory of seen/alerted ads (relative to this file)
+seed_on_first_run = true      # 1st scan of each search only memorises existing ads, no alert flood
+fetch_details = true          # open promising ads to read the full description (fault keywords)
+failure_alert_after = 5       # notify me if this many scans in a row fail (blocked / offline)
+log_level = "INFO"
+
+# ---- Notifications: set up at least one ---------------------------------------
+# ntfy (simplest): install the "ntfy" app (Android/iPhone), subscribe to a topic,
+# put the same topic here. Pick something long and random, anyone who knows it can read it.
+[notify.ntfy]
+topic = "liranfix-sniper-CHANGE-ME-7f3k9"
+# server = "https://ntfy.sh"
+# token = ""                  # only for a protected / self-hosted server
+
+# Telegram: create a bot with @BotFather, send it any message, then get your chat id
+# from https://api.telegram.org/bot<TOKEN>/getUpdates . Env vars TELEGRAM_BOT_TOKEN /
+# TELEGRAM_CHAT_ID override these lines.
+# [notify.telegram]
+# bot_token = "123456:ABC..."
+# chat_id = "123456789"
+
+# ---- Extra keywords on top of the built-in Hebrew/English lists (sniper_bot/keywords.py)
+[keywords]
+extra_faults = []             # e.g. ["רמקול לא עובד", "מצלמה לא עובדת"]
+extra_exclude = []            # e.g. ["ריפרבישד", "מחודש"]
+
+# ---- Searches -------------------------------------------------------------------
+# Every search needs a unique name, a source ("yad2" or "rss") and max_price (the floor price in ₪).
+# Optional: min_price, exclude, require_fault (alert only if a fault is mentioned),
+# conditions / product_types (yad2 ids), allow_no_price, include_business, pages.
+#
+# Yad2 ids: conditions 2 = כמו חדש, 3 = משומש, 4 = דרוש תיקון/שיפוץ
+#           product_types 328 = מחשבים ניידים, 267 = טלפונים ניידים, 4745 = טאבלטים
+
+# Any laptop marked "needs repair", or mentioning a fault, up to 900 ₪.
+[[search]]
+name = "לפטופ לתיקון"
+source = "yad2"
+query = "מחשב נייד"
+max_price = 900
+min_price = 50                # skips "1 ₪" placeholder prices
+product_types = ["328"]
+require_fault = true
+
+# MacBooks are worth more, so a higher ceiling.
+[[search]]
+name = "מקבוק תקול"
+source = "yad2"
+query = "macbook"
+max_price = 1500
+min_price = 100
+product_types = ["328"]       # laptops only, so a faulty MacBook *charger* doesn't alert
+require_fault = true
+
+# Phones with a broken screen / charging problem.
+[[search]]
+name = "אייפון לתיקון"
+source = "yad2"
+query = "אייפון"
+max_price = 700
+min_price = 50
+product_types = ["267"]
+require_fault = true
+
+# Any working laptop that is simply very cheap (no fault needed).
+[[search]]
+name = "לפטופ במחיר רצפה"
+source = "yad2"
+query = "מחשב נייד"
+max_price = 350
+min_price = 50
+product_types = ["328"]
+
+# Any board with an RSS/Atom feed. keywords: at least one must appear in the ad.
+# [[search]]
+# name = "לוח RSS"
+# source = "rss"
+# url = "https://example.com/feed.xml"
+# keywords = ["מחשב נייד", "לפטופ", "laptop"]
+# max_price = 800
+# require_fault = true

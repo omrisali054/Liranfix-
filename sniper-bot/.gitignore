@@ -1,0 +1,6 @@
+config.toml
+*.db
+*.db-journal
+__pycache__/
+.venv/
+*.log
