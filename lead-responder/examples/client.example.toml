@@ -1,0 +1,55 @@
+# One business = one file:  cp examples/client.example.toml clients/dana-clinic.toml
+# The file name (dana-clinic) becomes part of the URLs: lowercase letters, digits and dashes.
+# `python -m lead_responder check` prints the exact webhook URLs to paste into the client's form.
+
+business_name = "הקליניקה של דנה"
+key = "CHANGE-ME-random-key-for-the-form-webhook"   # secrets.token_urlsafe(24)
+booking_url = ""                                     # optional, usable in templates as {booking_url}
+
+# Who gets the alerts. At least one of the two.
+[owner]
+telegram_chat_ids = ["123456789"]                    # from `python -m lead_responder telegram-chats`
+# whatsapp_numbers = ["0501234567"]                  # needs [whatsapp] owner_template
+
+# WhatsApp Cloud API (developers.facebook.com → your app → WhatsApp → API Setup).
+# Leave the whole section out to only alert the owner (no messages to leads).
+[whatsapp]
+phone_number_id = "000000000000000"
+access_token = "EAAG..."                             # a System User token that doesn't expire
+language = "he"
+ack_template = "lead_ack"                            # the instant reply; approved template name
+ack_params = ["{first_name}", "{business}"]          # fills {{1}}, {{2}}, ...
+followup_template = "lead_followup"                  # "" = no follow-ups
+followup_params = ["{first_name}", "{business}"]
+# owner_template = "owner_lead_alert"                # owner alerts on WhatsApp, see README for its text
+# name_fallback = "🙂"                               # {first_name} when the form had no name
+# forward_replies = true                             # false if the owner reads this number in the WhatsApp app
+# Placeholders: {name} {first_name} {phone} {email} {source} {summary} {business} {booking_url}
+
+# Webhooks from Meta (WhatsApp replies / delivery failures, Facebook Lead Ads) are signed with the
+# app secret: App settings → Basic → App secret.
+[meta]
+app_secret = ""
+# page_access_token = ""                             # read Lead Ads directly (else: Make/Zapier → lead webhook)
+
+# Optional: a Google Sheet as the client's CRM (apps-script/sheet-webhook.gs explains the 3-minute setup).
+# [sheets]
+# url = "https://script.google.com/macros/s/AKfycb.../exec"
+# secret = "CHANGE-ME-same-as-SECRET-in-the-script"
+
+# Optional: the form uses labels we don't recognise on our own.
+# [fields]
+# phone = ["מספר לחזרה"]
+# name = ["איך קוראים לך"]
+
+# Everything below is the default; uncomment to change.
+[rules]
+# owner_reminder_minutes = [15, 60]   # remind the owner while the lead isn't marked handled
+# followup_hours = [24]               # WhatsApp follow-up to the lead if nobody handled it
+# dedupe_hours = 24                   # same phone again: tell the owner, don't message the lead twice
+# max_leads_per_hour = 30             # above this, someone is flooding the form: nothing is sent
+# quiet_hours = "21:00-08:00"         # reminders / follow-ups wait (the instant reply never waits)
+# shabbat = true                      # also quiet from Friday shabbat_start to Saturday shabbat_end
+# shabbat_start = "15:00"
+# shabbat_end = "20:30"
+# weekly_report = true                # Sunday 09:00 summary on Telegram

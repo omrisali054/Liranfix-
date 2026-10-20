@@ -1,0 +1,25 @@
+# Lead Responder: your server. Copy to config.toml and edit:  cp config.example.toml config.toml
+# One server runs all your clients; each client is one file in clients/ (see examples/client.example.toml).
+# config.toml and clients/*.toml are git-ignored, so tokens stay on the server.
+
+[server]
+public_url = "https://leads.example.com"   # where this server is reachable (https, needed by Meta)
+# Random strings: python -c "import secrets; print(secrets.token_urlsafe(24))"
+secret = "CHANGE-ME-signs-the-handled-links"      # or env LEAD_SECRET
+verify_token = "CHANGE-ME-meta-webhook-token"     # or env META_VERIFY_TOKEN; typed into Meta's webhook setup
+port = 8080
+db_path = "leads.db"
+clients_dir = "clients"
+timezone = "Asia/Jerusalem"
+graph_version = "v25.0"
+log_level = "INFO"
+
+# One Telegram bot for all your clients' owners (create it with @BotFather).
+# Owners open the bot and press Start; `python -m lead_responder telegram-chats` shows their chat id.
+[telegram]
+bot_token = ""                              # or env TELEGRAM_BOT_TOKEN
+
+# You, the operator: expired tokens, rejected templates and form floods are reported here,
+# so you fix things before the client notices. Your own chat id, from telegram-chats.
+[admin]
+telegram_chat_id = ""

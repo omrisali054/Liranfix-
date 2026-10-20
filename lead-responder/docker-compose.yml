@@ -1,0 +1,34 @@
+# One small server runs every client. Caddy gets the HTTPS certificate by itself.
+#
+#   mkdir -p data/clients
+#   cp config.example.toml data/config.toml          # edit; keep db_path = "leads.db"
+#   cp examples/client.example.toml data/clients/dana-clinic.toml
+#   # point a DNS A record (leads.yourdomain.co.il) at the server, put that name in deploy/Caddyfile
+#   docker compose up -d --build
+#   docker compose exec app python -m lead_responder -c /data/config.toml check
+#
+# New client: add a file to data/clients/, run `check`, then `docker compose restart app`.
+
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ./data:/data
+    expose:
+      - "8080"
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    depends_on:
+      - app
+
+volumes:
+  caddy_data:

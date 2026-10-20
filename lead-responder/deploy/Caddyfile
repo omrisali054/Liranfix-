@@ -1,0 +1,5 @@
+# Replace with your domain (its DNS A record must point at this server). Caddy handles HTTPS.
+leads.example.com {
+	encode gzip
+	reverse_proxy app:8080
+}

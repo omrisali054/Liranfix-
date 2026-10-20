@@ -1,0 +1,23 @@
+# systemd service, if you'd rather not use Docker (put Caddy or nginx with HTTPS in front of port 8080).
+#
+#   sudo cp deploy/lead-responder.service /etc/systemd/system/
+#   # edit User and the paths below
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now lead-responder
+#   journalctl -u lead-responder -f        # live log
+
+[Unit]
+Description=Lead Responder - instant WhatsApp replies to new leads
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=leads
+WorkingDirectory=/opt/lead-responder
+ExecStart=/opt/lead-responder/.venv/bin/python -m lead_responder -c config.toml serve
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

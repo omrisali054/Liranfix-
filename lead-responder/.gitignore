@@ -1,0 +1,9 @@
+config.toml
+clients/*.toml
+*.db
+*.db-shm
+*.db-wal
+__pycache__/
+.venv/
+*.log
+data/
